@@ -6,5 +6,7 @@ export default {
   /** OSS源站地址地址*/
   HOST: `http://static.dev.blogweb.cn`,
   // 对哪些字符串开头的文件夹进行打水印
-  waterMark:['article']//   /article/*
+  waterMark: ["article"], //   /article/*
+  /** 水印颜色*/
+  waterMarkColor: "gray",
 };

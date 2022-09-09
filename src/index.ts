@@ -31,6 +31,9 @@ app.get("/*", async (req, res, next) => {
     })
     .catch(err => {
       res.statusCode = 404;
+      res.json({
+        mes: `404:  ${path}`,
+      });
     });
 });
 
