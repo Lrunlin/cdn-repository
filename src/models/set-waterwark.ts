@@ -2,17 +2,16 @@ import sharp from "sharp";
 import TextToSVG from "text-to-svg";
 import config from "../../config";
 
-let textToSVG = TextToSVG.loadSync("江西拙楷2.0.ttf");
-let svg = textToSVG.getSVG(`@${config.SITE_NAME}`, {
-  fontSize: 14, // 字体大小
-  letterSpacing: 0.1,
-  attributes: {
-    fill: config.waterMarkColor, // 文字颜色
-  },
-  anchor: "left top",
-});
-
 async function waterMark(width: number | undefined, height: number | undefined) {
+  let textToSVG = TextToSVG.loadSync("public/font.ttf");
+  let svg = textToSVG.getSVG(`@${config.SITE_NAME}`, {
+    fontSize: 14, // 字体大小
+    letterSpacing: 0.1,
+    attributes: {
+      fill: config.waterMarkColor, // 文字颜色
+    },
+    anchor: "left top",
+  });
   return await sharp(Buffer.from(svg))
     .webp()
     .metadata()
@@ -45,7 +44,6 @@ async function waterMark(width: number | undefined, height: number | undefined) 
         .toBuffer();
     });
 }
-
 
 async function setWaterMark(buffer: Buffer) {
   let { width, height } = await sharp(buffer).metadata();
