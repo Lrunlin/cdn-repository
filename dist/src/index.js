@@ -25,16 +25,24 @@ app.use(express_1.default.json());
 app.get("/*", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     let path = req.path;
     let isSetSwaterMark = config_1.default.waterMark.some(item => path.includes(`/${item}`));
-    yield axios_1.default
-        .get(`${config_1.default.HOST}${path}`, {
+    let type = path.split(".").slice(-1).join("");
+    Promise.all(config_1.default.HOST.map(item => axios_1.default
+        .get(`${item}${path}`, {
         responseType: "arraybuffer",
     })
+        .then(response => response.data)
+        .catch(() => false)))
         .then((response) => __awaiter(void 0, void 0, void 0, function* () {
-        let type = path.split(".").slice(-1).join("");
-        res.type(type);
-        res.send(isSetSwaterMark
-            ? yield (0, set_waterwark_1.default)(yield (0, compress_1.default)(response.data, type))
-            : yield (0, compress_1.default)(response.data, type));
+        if (response[0]) {
+            res.type(type);
+            res.send(response[0]);
+        }
+        if (response[1]) {
+            res.type(type);
+            res.send(isSetSwaterMark
+                ? yield (0, set_waterwark_1.default)(yield (0, compress_1.default)(response[1], type))
+                : yield (0, compress_1.default)(response[1], type));
+        }
     }))
         .catch(err => {
         res.statusCode = 404;
